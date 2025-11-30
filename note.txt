@@ -1,0 +1,24 @@
+run:
+go run .\cmd\gochi-demo\main.go
+
+build:
+go build -o .\bin\gochi-demo.exe .\cmd\gochi-demo\main.go ; .\bin\gochi-demo.exe
+
+project-root/
+├── cmd/
+│   └── <app-name>/
+│       └── main.go
+├── internal/
+│   └── <private-package-name>/
+│       └── <source-files>.go
+├── pkg/
+│   └── <public-package-name>/
+│       └── <source-files>.go
+├── vendor/ (optional, for vendored dependencies)
+├── api/ (optional, for API definitions like Protobuf)
+├── web/ (optional, for web-related assets like templates, static files)
+├── scripts/ (optional, for build, deploy, or utility scripts)
+├── tests/ (optional, for integration or end-to-end tests)
+├── go.mod
+├── go.sum
+└── README.md

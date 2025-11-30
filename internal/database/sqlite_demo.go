@@ -1,0 +1,69 @@
+package database
+
+import (
+	"database/sql"
+	"fmt"
+	"log"
+
+	"github.com/jmoiron/sqlx"
+	_ "modernc.org/sqlite"
+)
+
+func InitDB(db *sqlx.DB) {
+	// Create table
+	schema := `
+	CREATE TABLE IF NOT EXISTS users (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		name TEXT NOT NULL,
+		age INTEGER NOT NULL
+	);`
+	db.MustExec(schema)
+
+	// ---- CREATE ----
+	createUserQuery := `INSERT INTO users (name, age) VALUES (:name, :age)`
+	var result sql.Result
+	var err error
+
+	for i := 1; i <= 100; i++ {
+		user := User{Name: fmt.Sprintf("Alice%v", i), Age: 25}
+
+		result, err = db.NamedExec(createUserQuery, user)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	id, _ := result.LastInsertId()
+	fmt.Println("Inserted user ID:", id)
+
+	// ---- READ (single) ----
+	var fetched User
+	err = db.Get(&fetched, `SELECT * FROM users WHERE id = ?`, id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Fetched user: %#v\n", fetched)
+
+	// ---- READ (multiple) ----
+	var users []User
+	err = db.Select(&users, `SELECT * FROM users ORDER BY id`)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("All users:", users)
+
+	// ---- UPDATE ----
+	updateQuery := `UPDATE users SET age = :age WHERE id = :id`
+	fetched.Age = 30
+	_, err = db.NamedExec(updateQuery, fetched)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Updated user age to 30")
+
+	// ---- DELETE ----
+	// _, err = db.Exec(`DELETE FROM users WHERE id = ?`, id)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// fmt.Println("Deleted user ID:", id)
+}
