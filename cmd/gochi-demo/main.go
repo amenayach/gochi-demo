@@ -38,5 +38,5 @@ func main() {
 
 	database.InitDB(db)
 
-	http.ListenAndServe(":3000", r)
+	http.ListenAndServe(":10000", r)
 }
