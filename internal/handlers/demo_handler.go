@@ -8,9 +8,9 @@ import (
 	"github.com/gochi-demo/internal/models"
 )
 
-func Hello(w http.ResponseWriter, _ *http.Request) {
-	w.Write([]byte("Hello from Chi!"))
-}
+// func Hello(w http.ResponseWriter, _ *http.Request) {
+// 	w.Write([]byte("Hello from Chi!"))
+// }
 
 func GetUserID(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
@@ -42,7 +42,7 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 
 func InitTestHandler(r *chi.Mux) {
 
-	r.Get("/", Hello)
+	// r.Get("/", Hello)
 
 	r.Get("/test/users/{id}", GetUserID)
 

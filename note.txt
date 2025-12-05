@@ -2,7 +2,11 @@ run:
 go run .\cmd\gochi-demo\main.go
 
 build:
-go build -o .\bin\gochi-demo.exe .\cmd\gochi-demo\main.go ; .\bin\gochi-demo.exe
+cls ; go build -o .\bin\gochi-demo.exe .\cmd\gochi-demo\main.go ; .\bin\gochi-demo.exe
+
+render build command:
+go build -tags netgo -ldflags "-s -w" -o app ./cmd/gochi-demo
+
 
 project-root/
 ├── cmd/

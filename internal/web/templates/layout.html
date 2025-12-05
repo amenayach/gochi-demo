@@ -1,0 +1,12 @@
+{{ define "layout" }}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ block "title" . }}{{ end }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {{ block "content" . }}{{ end }}
+</body>
+</html>
+{{ end }}
