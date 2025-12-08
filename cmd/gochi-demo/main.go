@@ -38,12 +38,24 @@ func EmbeddedFileServer(r chi.Router, route string, fsys embed.FS) {
 // HTML ROUTE USING EMBEDDED TEMPLATES
 func HandleTemplates(r *chi.Mux) {
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		data := map[string]any{
-			"Title": "Hello from Go Embedded Templates!",
-			"Msg":   "This is rendered from template files bundled inside the binary.",
+		user, err := auth.GetUserFromSession(r)
+		// if err != nil {
+		// http.Error(w, err.Error(), http.StatusForbidden)
+		// http.Redirect(w, r, "/login", http.StatusSeeOther)
+		// }
+
+		var firstname string
+		if err == nil {
+			firstname = user.FirstName
 		}
 
-		err := templates.ExecuteTemplate(w, "index.html", data)
+		data := map[string]any{
+			"Title":    "Hello from Go Embedded Templates!",
+			"Msg":      "This is rendered from template files bundled inside the binary.",
+			"Username": firstname,
+		}
+
+		err = templates.ExecuteTemplate(w, "index.html", data)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
