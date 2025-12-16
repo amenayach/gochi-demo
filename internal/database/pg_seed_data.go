@@ -9,14 +9,25 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-func InitSqliteDB(db *sqlx.DB) {
+func InitPgDB(db *sqlx.DB) {
 	// Create table
+	// schema := `
+	// CREATE TABLE IF NOT EXISTS users
+	// (
+	// 	id integer NOT NULL DEFAULT nextval('users_id_seq'::regclass),
+	// 	name text COLLATE pg_catalog."default" NOT NULL,
+	// 	age integer NOT NULL,
+	// 	CONSTRAINT users_pkey PRIMARY KEY (id)
+	// )
+
+	// TABLESPACE pg_default;`
 	schema := `
 	CREATE TABLE IF NOT EXISTS users (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		name TEXT NOT NULL,
-		age INTEGER NOT NULL
+		id SERIAL PRIMARY KEY,
+		name VARCHAR(100) NOT NULL,
+		age INT
 	);`
+
 	db.MustExec(schema)
 
 	// user count
